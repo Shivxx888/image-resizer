@@ -1,0 +1,839 @@
+# Free Online Image Resizer & Compressor — `index.html`
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Free Online Image Resizer & Compressor</title>
+  <meta name="description" content="Free online image resizer and compressor. Resize PNG, JPG and WebP images and compress them instantly in your browser. No upload or server required.">
+  <meta name="keywords" content="image resizer, image compressor, resize image online, compress image online, JPG compressor, PNG compressor, WebP compressor">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://example.com/">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --primary: #4f46e5;
+      --primary-dark: #3730a3;
+      --background: #f5f7fb;
+      --card: #ffffff;
+      --text: #111827;
+      --muted: #6b7280;
+      --border: #e5e7eb;
+      --success: #15803d;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--background);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .container {
+      width: min(1100px, 92%);
+      margin: auto;
+    }
+
+    header {
+      text-align: center;
+      padding: 42px 15px 25px;
+    }
+
+    header h1 {
+      font-size: clamp(28px, 5vw, 44px);
+      margin-bottom: 10px;
+      font-weight: 800;
+    }
+
+    header p {
+      color: var(--muted);
+      max-width: 700px;
+      margin: auto;
+    }
+
+    .ad-space {
+      min-height: 90px;
+      border: 1px dashed #cbd5e1;
+      background: #fff;
+      border-radius: 12px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #94a3b8;
+      margin: 20px 0;
+      font-size: 14px;
+    }
+
+    .tool-card {
+      background: var(--card);
+      border-radius: 20px;
+      padding: 28px;
+      box-shadow: 0 12px 35px rgba(15, 23, 42, 0.08);
+      margin: 25px 0;
+    }
+
+    .upload-area {
+      border: 2px dashed #a5b4fc;
+      background: #f8faff;
+      border-radius: 16px;
+      padding: 45px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: 0.25s ease;
+    }
+
+    .upload-area:hover,
+    .upload-area.dragover {
+      border-color: var(--primary);
+      background: #eef2ff;
+    }
+
+    .upload-icon {
+      font-size: 48px;
+      margin-bottom: 10px;
+    }
+
+    .upload-area h2 {
+      font-size: 22px;
+      margin-bottom: 7px;
+    }
+
+    .upload-area p {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    #fileInput {
+      display: none;
+    }
+
+    .button {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 20px;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: 700;
+      transition: 0.2s ease;
+    }
+
+    .primary-btn {
+      background: var(--primary);
+      color: #fff;
+      margin-top: 18px;
+    }
+
+    .primary-btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+    }
+
+    .secondary-btn {
+      background: #eef2ff;
+      color: var(--primary-dark);
+    }
+
+    .preview-section {
+      display: none;
+      margin-top: 28px;
+    }
+
+    .preview-section.active {
+      display: block;
+    }
+
+    .preview-image-wrapper {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      padding: 15px;
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    #previewImage {
+      max-width: 100%;
+      max-height: 450px;
+      object-fit: contain;
+      border-radius: 8px;
+    }
+
+    .image-info {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 15px;
+    }
+
+    .info-box {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 16px;
+      font-size: 14px;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .control-group {
+      margin-bottom: 5px;
+    }
+
+    .control-group.full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 7px;
+    }
+
+    input[type="number"] {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      font-size: 15px;
+      outline: none;
+    }
+
+    input[type="number"]:focus {
+      border-color: var(--primary);
+    }
+
+    .ratio-control {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 10px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .ratio-control input {
+      width: 17px;
+      height: 17px;
+    }
+
+    .quality-row {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    #quality {
+      width: 100%;
+      cursor: pointer;
+    }
+
+    #qualityValue {
+      min-width: 55px;
+      text-align: center;
+      font-weight: 700;
+      background: #eef2ff;
+      color: var(--primary-dark);
+      padding: 5px 8px;
+      border-radius: 7px;
+    }
+
+    .format-select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      font-size: 15px;
+      background: white;
+    }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 22px;
+    }
+
+    #downloadBtn {
+      display: none;
+      background: var(--success);
+      color: white;
+    }
+
+    #downloadBtn:hover {
+      background: #166534;
+    }
+
+    .result {
+      display: none;
+      margin-top: 18px;
+      padding: 14px;
+      border-radius: 10px;
+      background: #f0fdf4;
+      color: #166534;
+      font-size: 14px;
+    }
+
+    .content-section {
+      background: white;
+      border-radius: 18px;
+      padding: 30px;
+      margin: 25px 0;
+      box-shadow: 0 8px 25px rgba(15, 23, 42, 0.05);
+    }
+
+    .content-section h2 {
+      margin-bottom: 12px;
+      font-size: 27px;
+    }
+
+    .content-section h3 {
+      margin-top: 22px;
+      margin-bottom: 8px;
+      font-size: 19px;
+    }
+
+    .content-section p {
+      color: #4b5563;
+      margin-bottom: 10px;
+    }
+
+    .steps {
+      padding-left: 22px;
+      color: #4b5563;
+    }
+
+    .steps li {
+      margin-bottom: 9px;
+    }
+
+    .faq {
+      border-top: 1px solid var(--border);
+      padding: 16px 0;
+    }
+
+    .faq:first-of-type {
+      margin-top: 10px;
+    }
+
+    .faq h3 {
+      margin-top: 0;
+    }
+
+    footer {
+      text-align: center;
+      color: var(--muted);
+      padding: 30px 15px;
+      font-size: 14px;
+    }
+
+    @media (max-width: 700px) {
+      header {
+        padding-top: 28px;
+      }
+
+      .tool-card,
+      .content-section {
+        padding: 20px;
+      }
+
+      .controls {
+        grid-template-columns: 1fr;
+      }
+
+      .control-group.full {
+        grid-column: auto;
+      }
+
+      .upload-area {
+        padding: 35px 15px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="container">
+      <h1>Free Online Image Resizer &amp; Compressor</h1>
+      <p>
+        Resize and compress PNG, JPG, and WebP images directly in your browser.
+        Your images stay on your device.
+      </p>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <div class="ad-space">Ad Space Placeholder</div>
+
+    <section class="tool-card">
+
+      <div class="upload-area" id="uploadArea">
+        <div class="upload-icon">🖼️</div>
+        <h2>Upload Your Image</h2>
+        <p>Drag &amp; drop an image here or click below to choose a file.</p>
+        <p>Supported formats: PNG, JPG, JPEG, WebP</p>
+
+        <button type="button" class="button primary-btn" id="chooseBtn">
+          Choose Image
+        </button>
+
+        <input
+          type="file"
+          id="fileInput"
+          accept="image/png,image/jpeg,image/webp"
+        >
+      </div>
+
+      <div class="preview-section" id="previewSection">
+
+        <div class="preview-image-wrapper">
+          <img id="previewImage" alt="Uploaded image preview">
+
+          <div class="image-info">
+            <div class="info-box">
+              Original Size: <strong id="originalSize">-</strong>
+            </div>
+
+            <div class="info-box">
+              Original Dimensions: <strong id="originalDimensions">-</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="controls">
+
+          <div class="control-group">
+            <label for="width">Width (px)</label>
+            <input type="number" id="width" min="1" step="1">
+          </div>
+
+          <div class="control-group">
+            <label for="height">Height (px)</label>
+            <input type="number" id="height" min="1" step="1">
+          </div>
+
+          <div class="control-group full">
+            <label class="ratio-control">
+              <input type="checkbox" id="aspectRatio" checked>
+              Maintain Aspect Ratio
+            </label>
+          </div>
+
+          <div class="control-group full">
+            <label for="quality">Compression Quality</label>
+
+            <div class="quality-row">
+              <input
+                type="range"
+                id="quality"
+                min="1"
+                max="100"
+                value="80"
+              >
+              <span id="qualityValue">80%</span>
+            </div>
+          </div>
+
+          <div class="control-group full">
+            <label for="format">Output Format</label>
+
+            <select id="format" class="format-select">
+              <option value="image/jpeg">JPG / JPEG</option>
+              <option value="image/png">PNG</option>
+              <option value="image/webp">WebP</option>
+            </select>
+          </div>
+
+        </div>
+
+        <div class="actions">
+          <button type="button" class="button primary-btn" id="processBtn">
+            Resize &amp; Compress
+          </button>
+
+          <button type="button" class="button secondary-btn" id="resetBtn">
+            Reset
+          </button>
+
+          <button type="button" class="button" id="downloadBtn">
+            Download Compressed Image
+          </button>
+        </div>
+
+        <div class="result" id="result"></div>
+
+      </div>
+    </section>
+
+    <div class="ad-space">Ad Space Placeholder</div>
+
+    <section class="content-section">
+
+      <h2>Free Online Image Resizer &amp; Compressor</h2>
+
+      <p>
+        Our free online image resizer and compressor lets you resize and
+        compress images quickly without installing software. You can process
+        JPG, PNG, and WebP images directly in your browser.
+      </p>
+
+      <p>
+        The image processing happens locally on your device using JavaScript
+        and the HTML Canvas API. Your selected image does not need to be
+        uploaded to a server.
+      </p>
+
+      <h2>How to Resize and Compress an Image</h2>
+
+      <ol class="steps">
+        <li>Click <strong>Choose Image</strong> or drag an image into the upload area.</li>
+        <li>Check the original image dimensions and file size.</li>
+        <li>Enter your desired width and height.</li>
+        <li>Keep <strong>Maintain Aspect Ratio</strong> enabled to preserve the original proportions.</li>
+        <li>Adjust the compression quality using the quality slider.</li>
+        <li>Select JPG, PNG, or WebP as the output format.</li>
+        <li>Click <strong>Resize &amp; Compress</strong>.</li>
+        <li>Click <strong>Download Compressed Image</strong> to save the result.</li>
+      </ol>
+
+      <h2>Frequently Asked Questions</h2>
+
+      <div class="faq">
+        <h3>Is this image compressor free?</h3>
+        <p>
+          Yes. This tool is designed to resize and compress images directly
+          in your browser without requiring a paid subscription.
+        </p>
+      </div>
+
+      <div class="faq">
+        <h3>Are my images uploaded to a server?</h3>
+        <p>
+          No. Image processing is performed locally in your browser using
+          JavaScript and the Canvas API. The tool does not require an image
+          upload server.
+        </p>
+      </div>
+
+      <div class="faq">
+        <h3>Which image formats are supported?</h3>
+        <p>
+          You can upload PNG, JPG, JPEG, and WebP images. You can also choose
+          JPG, PNG, or WebP as the output format.
+        </p>
+      </div>
+
+    </section>
+
+  </main>
+
+  <footer>
+    © 2026 Free Image Resizer &amp; Compressor. All rights reserved.
+  </footer>
+
+  <script>
+    const fileInput = document.getElementById("fileInput");
+    const uploadArea = document.getElementById("uploadArea");
+    const chooseBtn = document.getElementById("chooseBtn");
+
+    const previewSection = document.getElementById("previewSection");
+    const previewImage = document.getElementById("previewImage");
+
+    const originalSize = document.getElementById("originalSize");
+    const originalDimensions = document.getElementById("originalDimensions");
+
+    const widthInput = document.getElementById("width");
+    const heightInput = document.getElementById("height");
+
+    const aspectRatioCheckbox = document.getElementById("aspectRatio");
+
+    const qualityInput = document.getElementById("quality");
+    const qualityValue = document.getElementById("qualityValue");
+
+    const formatSelect = document.getElementById("format");
+
+    const processBtn = document.getElementById("processBtn");
+    const resetBtn = document.getElementById("resetBtn");
+    const downloadBtn = document.getElementById("downloadBtn");
+
+    const result = document.getElementById("result");
+
+    let selectedFile = null;
+    let originalImage = new Image();
+    let originalWidth = 0;
+    let originalHeight = 0;
+    let aspectRatio = 1;
+    let outputBlob = null;
+
+    chooseBtn.addEventListener("click", function (event) {
+      event.stopPropagation();
+      fileInput.click();
+    });
+
+    uploadArea.addEventListener("click", function (event) {
+      if (event.target !== chooseBtn) {
+        fileInput.click();
+      }
+    });
+
+    fileInput.addEventListener("change", function () {
+      if (fileInput.files.length > 0) {
+        loadImage(fileInput.files[0]);
+      }
+    });
+
+    uploadArea.addEventListener("dragover", function (event) {
+      event.preventDefault();
+      uploadArea.classList.add("dragover");
+    });
+
+    uploadArea.addEventListener("dragleave", function () {
+      uploadArea.classList.remove("dragover");
+    });
+
+    uploadArea.addEventListener("drop", function (event) {
+      event.preventDefault();
+      uploadArea.classList.remove("dragover");
+
+      const files = event.dataTransfer.files;
+
+      if (files.length > 0) {
+        loadImage(files[0]);
+      }
+    });
+
+    function loadImage(file) {
+      if (!file.type.match(/^image\/(png|jpeg|webp)$/)) {
+        alert("Please select a PNG, JPG, JPEG, or WebP image.");
+        return;
+      }
+
+      selectedFile = file;
+
+      const objectURL = URL.createObjectURL(file);
+
+      originalImage = new Image();
+
+      originalImage.onload = function () {
+        originalWidth = originalImage.naturalWidth;
+        originalHeight = originalImage.naturalHeight;
+
+        aspectRatio = originalWidth / originalHeight;
+
+        previewImage.src = objectURL;
+
+        widthInput.value = originalWidth;
+        heightInput.value = originalHeight;
+
+        originalSize.textContent = formatBytes(file.size);
+        originalDimensions.textContent =
+          originalWidth + " × " + originalHeight + " px";
+
+        previewSection.classList.add("active");
+
+        downloadBtn.style.display = "none";
+        result.style.display = "none";
+
+        URL.revokeObjectURL(objectURL);
+      };
+
+      originalImage.onerror = function () {
+        alert("Unable to load this image.");
+        URL.revokeObjectURL(objectURL);
+      };
+
+      originalImage.src = objectURL;
+    }
+
+    widthInput.addEventListener("input", function () {
+      if (aspectRatioCheckbox.checked && originalWidth > 0) {
+        const newWidth = parseInt(widthInput.value, 10);
+
+        if (!isNaN(newWidth) && newWidth > 0) {
+          heightInput.value = Math.round(newWidth / aspectRatio);
+        }
+      }
+    });
+
+    heightInput.addEventListener("input", function () {
+      if (aspectRatioCheckbox.checked && originalHeight > 0) {
+        const newHeight = parseInt(heightInput.value, 10);
+
+        if (!isNaN(newHeight) && newHeight > 0) {
+          widthInput.value = Math.round(newHeight * aspectRatio);
+        }
+      }
+    });
+
+    qualityInput.addEventListener("input", function () {
+      qualityValue.textContent = qualityInput.value + "%";
+    });
+
+    processBtn.addEventListener("click", function () {
+      if (!selectedFile || !originalImage.src) {
+        alert("Please select an image first.");
+        return;
+      }
+
+      const width = parseInt(widthInput.value, 10);
+      const height = parseInt(heightInput.value, 10);
+
+      if (!width || !height || width < 1 || height < 1) {
+        alert("Please enter valid image dimensions.");
+        return;
+      }
+
+      processImage(width, height);
+    });
+
+    function processImage(width, height) {
+      const canvas = document.createElement("canvas");
+
+      canvas.width = width;
+      canvas.height = height;
+
+      const ctx = canvas.getContext("2d");
+
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = "high";
+
+      if (formatSelect.value === "image/jpeg") {
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, width, height);
+      }
+
+      ctx.drawImage(originalImage, 0, 0, width, height);
+
+      const quality = parseInt(qualityInput.value, 10) / 100;
+
+      canvas.toBlob(
+        function (blob) {
+          if (!blob) {
+            alert("Unable to process the image.");
+            return;
+          }
+
+          outputBlob = blob;
+
+          const savedSize = formatBytes(blob.size);
+          const reduction = selectedFile.size > 0
+            ? Math.max(
+                0,
+                ((selectedFile.size - blob.size) / selectedFile.size) * 100
+              )
+            : 0;
+
+          result.innerHTML =
+            "<strong>Done!</strong> " +
+            width +
+            " × " +
+            height +
+            " px · " +
+            savedSize +
+            " · " +
+            reduction.toFixed(1) +
+            "% smaller than the original.";
+
+          result.style.display = "block";
+          downloadBtn.style.display = "inline-flex";
+        },
+        formatSelect.value,
+        quality
+      );
+    }
+
+    downloadBtn.addEventListener("click", function () {
+      if (!outputBlob) {
+        alert("Please process the image first.");
+        return;
+      }
+
+      const extensionMap = {
+        "image/jpeg": "jpg",
+        "image/png": "png",
+        "image/webp": "webp"
+      };
+
+      const extension = extensionMap[formatSelect.value] || "jpg";
+
+      const link = document.createElement("a");
+
+      link.href = URL.createObjectURL(outputBlob);
+      link.download = "compressed-image." + extension;
+
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      setTimeout(function () {
+        URL.revokeObjectURL(link.href);
+      }, 1000);
+    });
+
+    resetBtn.addEventListener("click", function () {
+      selectedFile = null;
+      outputBlob = null;
+      originalImage = new Image();
+
+      fileInput.value = "";
+
+      previewSection.classList.remove("active");
+      downloadBtn.style.display = "none";
+      result.style.display = "none";
+
+      widthInput.value = "";
+      heightInput.value = "";
+
+      qualityInput.value = 80;
+      qualityValue.textContent = "80%";
+
+      formatSelect.value = "image/jpeg";
+    });
+
+    function formatBytes(bytes) {
+      if (bytes === 0) return "0 Bytes";
+
+      const units = [
+        "Bytes",
+        "KB",
+        "MB",
+        "GB"
+      ];
+
+      const index = Math.floor(
+        Math.log(bytes) / Math.log(1024)
+      );
+
+      return (
+        parseFloat(
+          (bytes / Math.pow(1024, index)).toFixed(2)
+        ) +
+        " " +
+        units[index]
+      );
+    }
+  </script>
+
+</body>
+</html>
+```
