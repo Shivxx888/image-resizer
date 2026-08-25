@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>About QuickResizeTool – Free Image Resizer & Compressor</title>
+
+  <meta
+    name="description"
+    content="Learn about QuickResizeTool, a free browser-based image resizer and compressor for JPG, PNG and WebP images."
+  >
+
+  <meta name="robots" content="index, follow">
+
+  <link rel="canonical" href="https://quickresizetool.com/about.html">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --primary: #4f46e5;
+      --primary-dark: #3730a3;
+      --primary-light: #eef2ff;
+      --background: #f5f7fb;
+      --card: #ffffff;
+      --text: #111827;
+      --muted: #6b7280;
+      --border: #e5e7eb;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--background);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      width: min(1100px, 92%);
+      margin: auto;
+    }
+
+    /* NAVBAR */
+
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-inner {
+      min-height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      font-size: 21px;
+      font-weight: 800;
+      color: var(--primary);
+      white-space: nowrap;
+    }
+
+    .brand span {
+      color: var(--text);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      display: block;
+      padding: 9px 13px;
+      border-radius: 8px;
+      color: #4b5563;
+      font-size: 14px;
+      font-weight: 600;
+      transition: 0.2s ease;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    /* HERO */
+
+    .hero {
+      text-align: center;
+      padding: 70px 15px 55px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      border: 1px solid #c7d2fe;
+      padding: 7px 13px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 18px;
+    }
+
+    .hero h1 {
+      font-size: clamp(34px, 6vw, 52px);
+      line-height: 1.15;
+      margin-bottom: 18px;
+      font-weight: 800;
+      letter-spacing: -1px;
+    }
+
+    .hero h1 span {
+      color: var(--primary);
+    }
+
+    .hero p {
+      max-width: 720px;
+      margin: auto;
+      color: var(--muted);
+      font-size: 17px;
+    }
+
+    /* CONTENT */
+
+    .content {
+      padding-bottom: 45px;
+    }
+
+    .content-card {
+      background: var(--card);
+      border: 1px solid rgba(229, 231, 235, 0.8);
+      border-radius: 22px;
+      padding: 38px;
+      margin-bottom: 25px;
+      box-shadow: 0 12px 35px rgba(15, 23, 42, 0.06);
+    }
+
+    .content-card h2 {
+      font-size: 27px;
+      margin-bottom: 13px;
+      line-height: 1.3;
+    }
+
+    .content-card h3 {
+      font-size: 19px;
+      margin-top: 25px;
+      margin-bottom: 8px;
+    }
+
+    .content-card p {
+      color: #4b5563;
+      margin-bottom: 12px;
+    }
+
+    .content-card ul {
+      padding-left: 22px;
+      color: #4b5563;
+    }
+
+    .content-card li {
+      margin-bottom: 8px;
+    }
+
+    /* FEATURE GRID */
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin-top: 22px;
+    }
+
+    .feature-card {
+      background: #f8faff;
+      border: 1px solid #e0e7ff;
+      border-radius: 15px;
+      padding: 23px;
+      transition: 0.2s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.07);
+    }
+
+    .feature-icon {
+      width: 46px;
+      height: 46px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      background: var(--primary-light);
+      font-size: 23px;
+      margin-bottom: 13px;
+    }
+
+    .feature-card h3 {
+      margin: 0 0 7px;
+      font-size: 17px;
+    }
+
+    .feature-card p {
+      font-size: 14px;
+      margin: 0;
+    }
+
+    /* STEPS */
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin-top: 22px;
+    }
+
+    .step {
+      position: relative;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      padding: 23px;
+    }
+
+    .step-number {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--primary);
+      color: white;
+      border-radius: 50%;
+      font-weight: 800;
+      margin-bottom: 13px;
+    }
+
+    .step h3 {
+      margin: 0 0 7px;
+      font-size: 17px;
+    }
+
+    .step p {
+      margin: 0;
+      font-size: 14px;
+    }
+
+    /* CTA */
+
+    .cta {
+      background: linear-gradient(135deg, #4f46e5, #3730a3);
+      color: white;
+      border-radius: 22px;
+      padding: 42px 30px;
+      text-align: center;
+      margin-bottom: 25px;
+      box-shadow: 0 15px 35px rgba(79, 70, 229, 0.22);
+    }
+
+    .cta h2 {
+      font-size: 29px;
+      margin-bottom: 9px;
+    }
+
+    .cta p {
+      max-width: 650px;
+      margin: 0 auto 22px;
+      color: #e0e7ff;
+    }
+
+    .cta-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: white;
+      color: var(--primary-dark);
+      padding: 12px 22px;
+      border-radius: 10px;
+      font-weight: 800;
+      font-size: 15px;
+      transition: 0.2s ease;
+    }
+
+    .cta-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    /* FOOTER */
+
+    footer {
+      background: #ffffff;
+      border-top: 1px solid var(--border);
+      padding: 35px 15px;
+      margin-top: 15px;
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .footer-brand {
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .footer-text {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 4px;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 16px;
+    }
+
+    .footer-links a {
+      color: #6b7280;
+      font-size: 13px;
+      transition: 0.2s ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--primary);
+    }
+
+    /* RESPONSIVE */
+
+    @media (max-width: 800px) {
+      .nav-inner {
+        flex-direction: column;
+        justify-content: center;
+        padding: 13px 0;
+      }
+
+      .nav-links {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .feature-grid,
+      .steps {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-inner {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .footer-links {
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .hero {
+        padding: 48px 12px 38px;
+      }
+
+      .hero p {
+        font-size: 15px;
+      }
+
+      .content-card {
+        padding: 24px 20px;
+        border-radius: 17px;
+      }
+
+      .content-card h2 {
+        font-size: 23px;
+      }
+
+      .nav-links a {
+        padding: 7px 9px;
+        font-size: 13px;
+      }
+
+      .cta {
+        padding: 34px 20px;
+        border-radius: 18px;
+      }
+
+      .cta h2 {
+        font-size: 24px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVIGATION -->
+  <nav class="navbar">
+    <div class="container nav-inner">
+
+      <a href="/" class="brand">
+        Quick<span>ResizeTool</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/" class="active">Image Resizer</a></li>
+        <li><a href="/about.html" class="active">About</a></li>
+        <li><a href="/contact.html">Contact</a></li>
+        <li><a href="/privacy-policy.html">Privacy</a></li>
+        <li><a href="/terms.html">Terms</a></li>
+      </ul>
+
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="container">
+
+      <div class="hero-badge">
+        ✦ Simple. Fast. Browser-Based.
+      </div>
+
+      <h1>
+        About <span>QuickResizeTool</span>
+      </h1>
+
+      <p>
+        A simple online solution for resizing and compressing images
+        without installing complicated software.
+      </p>
+
+    </div>
+  </header>
+
+  <main class="container content">
+
+    <!-- ABOUT -->
+    <section class="content-card">
+
+      <h2>About QuickResizeTool</h2>
+
+      <p>
+        QuickResizeTool is a free online image resizing and compression
+        tool designed to make everyday image optimization simple and
+        convenient.
+      </p>
+
+      <p>
+        Whether you need to reduce an image's dimensions, compress a
+        large file, or convert an image between common formats,
+        QuickResizeTool provides an easy-to-use browser-based solution.
+      </p>
+
+      <p>
+        The goal is simple: provide useful image tools through a clean,
+        straightforward interface that works across modern desktop and
+        mobile browsers.
+      </p>
+
+    </section>
+
+    <!-- FEATURES -->
+    <section class="content-card">
+
+      <h2>What Can QuickResizeTool Do?</h2>
+
+      <div class="feature-grid">
+
+        <div class="feature-card">
+          <div class="feature-icon">↔️</div>
+          <h3>Resize Images</h3>
+          <p>
+            Change the width and height of an image while optionally
+            maintaining its original aspect ratio.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <h3>Compress Images</h3>
+          <p>
+            Adjust image quality to help reduce file size for easier
+            storage, sharing and web use.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🔄</div>
+          <h3>Choose Output Format</h3>
+          <p>
+            Export processed images as JPG, PNG or WebP depending on
+            your requirements.
+          </p>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="content-card">
+
+      <h2>How QuickResizeTool Works</h2>
+
+      <p>
+        QuickResizeTool uses standard browser technologies, including
+        JavaScript and the HTML Canvas API, to process supported images
+        directly in the browser.
+      </p>
+
+      <div class="steps">
+
+        <div class="step">
+          <div class="step-number">1</div>
+          <h3>Select an Image</h3>
+          <p>
+            Choose a supported image from your device or use the
+            drag-and-drop upload area.
+          </p>
+        </div>
+
+        <div class="step">
+          <div class="step-number">2</div>
+          <h3>Adjust Settings</h3>
+          <p>
+            Set your preferred dimensions, compression quality and
+            output format.
+          </p>
+        </div>
+
+        <div class="step">
+          <div class="step-number">3</div>
+          <h3>Download the Result</h3>
+          <p>
+            Process the image and download the resulting file directly
+            to your device.
+          </p>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- PRIVACY -->
+    <section class="content-card">
+
+      <h2>Browser-Based Image Processing</h2>
+
+      <p>
+        QuickResizeTool is designed around client-side image processing.
+        The image resizing and compression functionality can be performed
+        directly in your web browser using JavaScript and the Canvas API.
+      </p>
+
+      <p>
+        This means the image processing functionality does not require
+        the normal workflow of uploading an image to an image-processing
+        server.
+      </p>
+
+      <p>
+        For more information about privacy and how the website handles
+        information, please read our
+        <a
+          href="/privacy-policy.html"
+          style="color: #4f46e5; font-weight: 700;"
+        >
+          Privacy Policy
+        </a>.
+      </p>
+
+    </section>
+
+    <!-- SUPPORTED FORMATS -->
+    <section class="content-card">
+
+      <h2>Supported Image Formats</h2>
+
+      <p>
+        QuickResizeTool supports several commonly used image formats.
+      </p>
+
+      <ul>
+        <li><strong>JPG / JPEG</strong> – commonly used for photographs and web images.</li>
+        <li><strong>PNG</strong> – useful when transparency or lossless image quality is important.</li>
+        <li><strong>WebP</strong> – a modern image format designed for efficient web delivery.</li>
+      </ul>
+
+    </section>
+
+    <!-- WHY USE -->
+    <section class="content-card">
+
+      <h2>Why Use QuickResizeTool?</h2>
+
+      <div class="feature-grid">
+
+        <div class="feature-card">
+          <div class="feature-icon">🆓</div>
+          <h3>Free to Use</h3>
+          <p>
+            Resize and compress supported images through the online tool
+            without installing dedicated software.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🌐</div>
+          <h3>Works in Your Browser</h3>
+          <p>
+            Use the tool from a modern web browser on compatible desktop
+            and mobile devices.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">📱</div>
+          <h3>Mobile Friendly</h3>
+          <p>
+            The interface is designed to adapt to smaller screens as
+            well as larger desktop displays.
+          </p>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- WHO CAN USE -->
+    <section class="content-card">
+
+      <h2>Who Can Use QuickResizeTool?</h2>
+
+      <p>
+        The tool can be useful for anyone who needs to quickly adjust
+        image dimensions or reduce image file sizes.
+      </p>
+
+      <ul>
+        <li>Students working with digital assignments</li>
+        <li>Bloggers and content creators</li>
+        <li>Website owners</li>
+        <li>Social media users</li>
+        <li>People preparing images for online forms</li>
+        <li>Anyone who needs a quick image resizing or compression tool</li>
+      </ul>
+
+    </section>
+
+    <!-- CTA -->
+    <section class="cta">
+
+      <h2>Ready to Resize an Image?</h2>
+
+      <p>
+        Use QuickResizeTool to resize and compress your image directly
+        in your browser.
+      </p>
+
+      <a href="/" class="cta-button">
+        Open Image Resizer →
+      </a>
+
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+
+    <div class="container footer-inner">
+
+      <div>
+        <div class="footer-brand">QuickResizeTool</div>
+
+        <div class="footer-text">
+          Free online image resizing and compression tools.
+        </div>
+
+        <div class="footer-text">
+          © 2026 QuickResizeTool. All rights reserved.
+        </div>
+      </div>
+
+      <div class="footer-links">
+        <a href="/">Home</a>
+        <a href="/about.html">About</a>
+        <a href="/contact.html">Contact</a>
+        <a href="/privacy-policy.html">Privacy Policy</a>
+        <a href="/terms.html">Terms</a>
+      </div>
+
+    </div>
+
+  </footer>
+
+</body>
+</html>
